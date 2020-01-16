@@ -21,6 +21,7 @@ public enum ExceptionEnum {
     PICTURE_TYPE_NOT_CORRECT(407,"文件类型不匹配"),
     GOODS_NOT_EXIT(409,"商品信息不存在"),
     BRAND_NOT_EXIT(410,"品牌信息不存在"),
+    SPU_DETAIL_ERROR(411,"商品详情出错"),
     SPC_NOT_FOUND(408,"规格参数不存在")
     ;
     private int code;

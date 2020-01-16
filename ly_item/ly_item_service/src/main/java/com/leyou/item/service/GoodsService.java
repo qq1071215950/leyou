@@ -120,5 +120,13 @@ public class GoodsService {
             this.stockMapper.insert(stock);
         }
     }
+
+    public SpuDetail querySpuDetailBySpuId(Long spuId) {
+        SpuDetail spuDetail = spuDetailMapper.selectByPrimaryKey(spuId);
+        if (spuDetail == null){
+            throw new LyException(ExceptionEnum.SPU_DETAIL_ERROR);
+        }
+        return spuDetail;
+    }
 }
 
