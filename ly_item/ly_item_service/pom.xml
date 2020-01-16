@@ -48,7 +48,7 @@
         </dependency>
 
         <dependency>
-           <groupId>com.leyou.parent</groupId>
+            <groupId>com.lyyou.servce</groupId>
             <artifactId>ly_item_interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

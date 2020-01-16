@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.lyyou.servce</groupId>
     <artifactId>ly_item_interface</artifactId>
 
     <dependencies>

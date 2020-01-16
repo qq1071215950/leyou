@@ -13,6 +13,7 @@
         <module>ly_item</module>
         <module>ly_common</module>
         <module>ly_upload</module>
+        <module>leyou_search</module>
     </modules>
 
 
