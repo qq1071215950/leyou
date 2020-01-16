@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,5 +48,16 @@ public class CategoryController {
         // 响应500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+    /**
+     * 根据分类id查询分类信息
+     * @param ids
+     * @return
+     */
+    @RequestMapping("list/ids")
+    public ResponseEntity<List<Category>> queryCategoryByids(@RequestParam List<Long> ids) {
+        return ResponseEntity.ok(categoryService.queryByIds(ids));
+    }
+
 
 }
