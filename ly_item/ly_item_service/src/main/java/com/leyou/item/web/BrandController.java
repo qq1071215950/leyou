@@ -37,6 +37,12 @@ public class BrandController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 新增品牌
+     * @param brand
+     * @param cids
+     * @return
+     */
     @PostMapping
     public ResponseEntity<Void> saveBrand(Brand brand , @RequestParam("cids") List<Long> cids){
         brandService.saveBrand(brand, cids);
@@ -56,4 +62,14 @@ public class BrandController {
         }
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("cid/{cid}")
+    public ResponseEntity<List<Brand>> queryByBrandcid(@PathVariable("cid") Long cid) {
+        List<Brand> list = this.brandService.queryBycid(cid);
+        if (list == null || list.size() < 1) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
+    }
+
 }

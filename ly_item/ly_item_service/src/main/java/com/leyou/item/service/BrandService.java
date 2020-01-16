@@ -77,4 +77,8 @@ public class BrandService {
         }
         return brand;
     }
+
+    public List<Brand> queryBycid(Long cid) {
+        return this.brandMapper.queryByCategoryId(cid);
+    }
 }
