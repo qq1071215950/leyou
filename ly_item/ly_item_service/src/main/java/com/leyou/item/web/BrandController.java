@@ -2,7 +2,9 @@ package com.leyou.item.web;
 
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.pojo.Brand;
+import com.leyou.item.pojo.Category;
 import com.leyou.item.service.BrandService;
+import com.leyou.item.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping("page")
     public ResponseEntity<PageResult<Brand>> queryBrandByPage(
             @RequestParam(value = "page",defaultValue = "1") Integer page,
@@ -36,5 +41,19 @@ public class BrandController {
     public ResponseEntity<Void> saveBrand(Brand brand , @RequestParam("cids") List<Long> cids){
         brandService.saveBrand(brand, cids);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 通过品牌id查询分类信息
+     * @param bid
+     * @return
+     */
+    @GetMapping("bid/{bid}")
+    public ResponseEntity<List<Category>> queryByBrandId(@PathVariable("bid") Long bid) {
+        List<Category> list = this.categoryService.queryByBrandId(bid);
+        if (list == null || list.size() < 1) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
     }
 }
