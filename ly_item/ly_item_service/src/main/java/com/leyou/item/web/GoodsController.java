@@ -81,4 +81,20 @@ public class GoodsController {
     public ResponseEntity<List<Sku>> querySkulistSpuId(@RequestParam Long spuId) {
         return ResponseEntity.ok(goodsService.querySkulistSpuId(spuId));
     }
+
+    /**
+     * 修改商品信息
+     * @param spu
+     * @return
+     */
+    @PutMapping
+    public ResponseEntity<Void> updateGoods(@RequestBody SpuBo spu) {
+        try {
+            this.goodsService.update(spu);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

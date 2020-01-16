@@ -9,5 +9,5 @@ import tk.mybatis.mapper.common.Mapper;
  * @version 1.0
  * @date 2020/1/16 14:05
  */
-public interface SkuMapper extends Mapper<Sku> , IdListMapper {
+public interface SkuMapper extends Mapper<Sku> {
 }

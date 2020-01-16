@@ -150,5 +150,38 @@ public class GoodsService {
         list.forEach(s ->s.setStock(stockMap.get(s.getId())));
         return list;
     }
+    @Transactional
+    public void update(SpuBo spu) {
+        Sku sku = new Sku();
+        sku.setSpuId(spu.getId());
+        // 查询以前sku
+        List<Sku> skus = skuMapper.select(sku);
+        // 如果以前存在，则删除
+        if(!CollectionUtils.isEmpty(skus)) {
+            List<Long> ids = skus.stream().map(s -> s.getId()).collect(Collectors.toList());
+            // 删除以前库存
+            Example example = new Example(Stock.class);
+            example.createCriteria().andIn("skuId", ids);
+            this.stockMapper.deleteByExample(example);
+
+            // 删除以前的sku
+            Sku record = new Sku();
+            record.setSpuId(spu.getId());
+            this.skuMapper.delete(record);
+
+        }
+        // 新增sku和库存
+        saveSkuAndStock(spu.getSkus(), spu.getId());
+
+        // 更新spu
+        spu.setLastUpdateTime(new Date());
+        spu.setCreateTime(null);
+        spu.setValid(null);
+        spu.setSaleable(null);
+        this.spuMapper.updateByPrimaryKeySelective(spu);
+
+        // 更新spu详情
+        this.spuDetailMapper.updateByPrimaryKeySelective(spu.getSpuDetail());
+    }
 }
 
