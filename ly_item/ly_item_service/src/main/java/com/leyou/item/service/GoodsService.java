@@ -6,20 +6,22 @@ import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exceptionx.LyException;
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.bo.SpuBo;
+import com.leyou.item.mapper.SkuMapper;
 import com.leyou.item.mapper.SpuDetailMapper;
 import com.leyou.item.mapper.SpuMapper;
-import com.leyou.item.pojo.Brand;
-import com.leyou.item.pojo.Category;
-import com.leyou.item.pojo.Spu;
+import com.leyou.item.mapper.StockMapper;
+import com.leyou.item.pojo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,10 @@ public class GoodsService {
     private CategoryService categoryService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private StockMapper stockMapper;
+    @Autowired
+    private SkuMapper skuMapper;
 
     public PageResult<SpuBo> querySpuByPageAndSort(Integer page, Integer rows, Boolean saleable, String key) {
         // 分页
@@ -78,6 +84,41 @@ public class GoodsService {
             list.add(spuBo);
         }
         return list;
+    }
+    @Transactional
+    public void save(SpuBo spuBo) {
+        Spu spu = new Spu();
+        BeanUtils.copyProperties(spuBo,spu);
+        // 保存spu
+        spu.setSaleable(true);
+        spu.setValid(true);
+        spu.setCreateTime(new Date());
+        spu.setLastUpdateTime(spu.getCreateTime());
+        this.spuMapper.insert(spu);
+        // 保存spu详情
+        SpuDetail spuDetail = spuBo.getSpuDetail();
+        spuDetailMapper.insert(spuDetail);
+        // 保存sku和库存信息
+        saveSkuAndStock(spuBo.getSkus(), spuBo.getId());
+    }
+    private void saveSkuAndStock(List<Sku> skus, Long spuId) {
+        for (Sku sku : skus) {
+            if (!sku.getEnable()) {
+                continue;
+            }
+            // 保存sku
+            sku.setSpuId(spuId);
+            // 默认不参与任何促销
+            sku.setCreateTime(new Date());
+            sku.setLastUpdateTime(sku.getCreateTime());
+            this.skuMapper.insert(sku);
+
+            // 保存库存信息
+            Stock stock = new Stock();
+            stock.setSkuId(sku.getId());
+            stock.setStock(sku.getStock());
+            this.stockMapper.insert(stock);
+        }
     }
 }
 
