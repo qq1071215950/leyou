@@ -22,6 +22,8 @@ public enum ExceptionEnum {
     GOODS_NOT_EXIT(409,"商品信息不存在"),
     BRAND_NOT_EXIT(410,"品牌信息不存在"),
     SPU_DETAIL_ERROR(411,"商品详情出错"),
+    SKU_NOT_EXIT(412,"商品sku不存在"),
+    SKU_STORE_NOT_FULL(413,"商品库存不足"),
     SPC_NOT_FOUND(408,"规格参数不存在")
     ;
     private int code;

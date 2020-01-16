@@ -10,5 +10,5 @@ import tk.mybatis.mapper.common.base.insert.InsertMapper;
  * @version 1.0
  * @date 2020/1/16 14:04
  */
-public interface StockMapper extends Mapper<Stock>{
+public interface StockMapper extends Mapper<Stock>,IdListMapper{
 }

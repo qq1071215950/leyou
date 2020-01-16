@@ -19,10 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -127,6 +124,31 @@ public class GoodsService {
             throw new LyException(ExceptionEnum.SPU_DETAIL_ERROR);
         }
         return spuDetail;
+    }
+
+    public List<Sku> querySkulistSpuId(Long spuId) {
+       Sku sku = new Sku();
+       sku.setSpuId(spuId);
+       List<Sku> list = skuMapper.select(sku);
+       if (CollectionUtils.isEmpty(list)){
+           throw new LyException(ExceptionEnum.   SKU_NOT_EXIT);
+       }
+       // 查询库存
+    /*    for (Sku sku1 : list){
+            Stock stock = stockMapper.selectByPrimaryKey(sku1.getId());
+            if (stock == null){
+                throw new LyException(ExceptionEnum.SKU_STORE_NOT_FULL);
+            }
+            sku1.setStock(stock.getStock());
+        }*/
+        List<Long> ids = list.stream().map(Sku::getId).collect(Collectors.toList());
+        List stockList = stockMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(stockList)){
+            throw new LyException(ExceptionEnum.SKU_STORE_NOT_FULL);
+        }
+        Map<Long, Long> stockMap = (Map<Long, Long>) stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
+        list.forEach(s ->s.setStock(stockMap.get(s.getId())));
+        return list;
     }
 }
 

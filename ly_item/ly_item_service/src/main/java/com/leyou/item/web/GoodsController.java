@@ -2,6 +2,7 @@ package com.leyou.item.web;
 
 import com.leyou.common.vo.PageResult;
 import com.leyou.item.bo.SpuBo;
+import com.leyou.item.pojo.Sku;
 import com.leyou.item.pojo.Spu;
 import com.leyou.item.pojo.SpuDetail;
 import com.leyou.item.service.GoodsService;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author jiange
@@ -67,5 +70,15 @@ public class GoodsController {
     @GetMapping("/spu/detail/{id}")
     public ResponseEntity<SpuDetail> querySpuDetailBySpuId(@PathVariable("id") Long spuId) {
        return ResponseEntity.ok(goodsService.querySpuDetailBySpuId(spuId));
+    }
+
+    /**
+     * 根据spu查询sku list
+     * @param spuId
+     * @return
+     */
+    @GetMapping("/spu/list")
+    public ResponseEntity<List<Sku>> querySkulistSpuId(@RequestParam Long spuId) {
+        return ResponseEntity.ok(goodsService.querySkulistSpuId(spuId));
     }
 }
