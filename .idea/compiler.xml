@@ -16,11 +16,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="leyou_goods_web" target="1.8" />
       <module name="lyregistry" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="leyou_goods_web" options="-parameters" />
       <module name="leyou_search" options="-parameters" />
       <module name="ly_common" options="-parameters" />
       <module name="ly_gateway" options="-parameters" />
